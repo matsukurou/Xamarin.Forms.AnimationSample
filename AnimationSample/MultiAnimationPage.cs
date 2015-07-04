@@ -78,6 +78,18 @@ namespace AnimationSample
 					boxViewFront.ScaleTo(1, 1000);
 				}
 			};
+
+			// 回転アニメ制御用のボタンを生成
+			var buttonRelRotate = new Button
+			{
+				Text = "RelRotate",
+			};
+			// ボタン押し時の挙動
+			buttonRelRotate.Clicked += (sender, e) => 
+			{
+				// ボタンが押されるたびにボックスを30度ずつ回転させる
+				boxViewFront.RelRotateTo(30, 500);
+			};				
 			#endregion
 
 			#region レイアウト関連
@@ -88,6 +100,7 @@ namespace AnimationSample
 				{
 					buttonMove,
 					buttonScale,
+					buttonRelRotate,
 				},
 			};
 
