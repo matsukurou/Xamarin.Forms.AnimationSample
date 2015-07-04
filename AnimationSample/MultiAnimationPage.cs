@@ -8,6 +8,7 @@ namespace AnimationSample
 	{
 		public MultiAnimationPage()
 		{
+			#region アニメーション用のボックスの生成
 			// 移動値算出用のボックスを生成
 			var boxViewBackground = new BoxView
 			{
@@ -18,7 +19,6 @@ namespace AnimationSample
 			var boxViewFront = new BoxView
 			{
 				Color = Color.Blue,
-				IsVisible = false,
 			};
 
 			// 背面アニメーション用のボックスを生成
@@ -26,36 +26,72 @@ namespace AnimationSample
 			{
 				Color = Color.Red,
 			};
+			#endregion
 
-			// アニメーション開始用のボタンを生成
-			var button = new Button
+			#region アニメーション制御用のボタン類の設定
+			// 移動アニメーション制御用のボタンを生成
+			var buttonMove = new Button
 			{
 				Text = "Animation",
 			};
-
 			// ボタン押し時の挙動
-			button.Clicked += (sender, e) => 
+			buttonMove.Clicked += (sender, e) => 
 			{
 				var box = boxViewBackground;
 				// 下降アニメーション用のレクタングル
 				var moveDownRect = new Rectangle(0, box.Y + box.Height, box.Width, box.Height);
 				// 上昇アニメーション用のレクタングル
 				var moveUpRect = new Rectangle(0, box.Y, box.Width, box.Height);
-				boxViewFront.IsVisible = true;
 
 				if (boxViewFront.Y == boxViewBackground.Y)
 				{
-					// 現在地から指定位置までボックスをアニメーションさせる
+					// 現在のレイアウトから指定のレイアウトにアニメーションさせる
+					// ここではRectangleのサイズを変更していないので、単なる下方への移動アニメーション
 					boxViewFront.LayoutTo(moveDownRect);
 				}
 				else
 				{
-					// 現在地から指定位置まで、指定時間かけてボックスをアニメーションさせる
+					// 現在のレイアウトから指定のレイアウトに、指定時間かけてボックスをアニメーションさせる
+					// ここではRectangleのサイズを変更していないので、単なる上方への移動アニメーション
 					boxViewFront.LayoutTo(moveUpRect, 1000);
 				}
 			};
 
-			// レイアウト用のグリッドを生成
+			// 拡大縮小アニメ制御用のボタンを生成
+			var buttonScale = new Button
+			{
+				Text = "Scale",
+			};
+			// ボタン押し時の挙動
+			buttonScale.Clicked += (sender, e) => 
+			{
+				if (boxViewFront.Scale == 1)
+				{
+					// ボックスのスケールが1だった場合
+					// 指定秒かけてScaleを0にする
+					boxViewFront.ScaleTo(0, 500);
+				}
+				else
+				{
+					// ボックスのスケールが0だった場合
+					// 指定秒かけてScaleを1にする
+					boxViewFront.ScaleTo(1, 1000);
+				}
+			};
+			#endregion
+
+			#region レイアウト関連
+			// ボタン用のレイアウト
+			var stack = new StackLayout
+			{
+				Children = 
+				{
+					buttonMove,
+					buttonScale,
+				},
+			};
+
+			// ページ全体のレイアウト用のグリッドを生成
 			var grid = new Grid
 			{
 				// 画面縦いっぱいに表示する
@@ -63,18 +99,19 @@ namespace AnimationSample
 
 				RowDefinitions =
 				{
-					new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
+					new RowDefinition { Height = GridLength.Auto },
 					new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
 				},
 			};
 			// グリッドにパーツを設定
-			grid.Children.Add(button, 0, 0);
+			grid.Children.Add(stack, 0, 0);
 			grid.Children.Add(boxViewBackground, 0, 1);
 			grid.Children.Add(boxViewBack, 0, 1);
 			grid.Children.Add(boxViewFront, 0, 1);
 
 			// ページのコンテントにグリッドを設定
 			Content = grid;
+			#endregion
 		}
 	}
 }
