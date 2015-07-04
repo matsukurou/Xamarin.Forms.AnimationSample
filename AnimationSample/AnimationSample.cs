@@ -9,7 +9,8 @@ namespace AnimationSample
         public App()
         {
             // The root page of your application
-            MainPage = new SingleAnimationPage();
+            //MainPage = new SingleAnimationPage();
+            MainPage = new MultiAnimationPage();
         }
 
         protected override void OnStart()
